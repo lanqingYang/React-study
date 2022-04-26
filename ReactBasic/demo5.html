@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@17/umd/react.development.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    /* 2----类式组件,首字母大写！ */
+    class MyComponent extends React.Component{
+        render(){  //render放在哪里？ - MyComponent的原型对象上，供实例使用， 实例呢？
+            // /render中this是谁？- MyComponent类的实例对象 , 或者说MyComponent组件实例对象
+            console.log('render中的this:',this);
+            return <h2>类定义的组件，适合【复杂组件】的定义</h2>
+        }
+    }
+
+    //渲染组件到页面
+    ReactDOM.render(
+     <MyComponent />,
+      document.getElementById("reactContainer")
+    );
+        /* 
+    执行了render( <MyComponent />,。。。之后发生了什么？
+    1. React找到组件标签，找到MyComponent组件
+    2.发现是类定义的，随后new 类的实例，通过该实例，调用原型上的render方法
+    3.将返回的虚拟DOM转为真实DOM，呈现再页面中
+    */
+  </script>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@17/umd/react.development.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    /* 2----类式组件,首字母大写！ */
+    class Weather extends React.Component {
+
+        //============构造器调用几次 ？   ==== 1次
+      constructor(props) {
+          console.log('构造器调用了')
+        super(props);
+        this.state = {
+          isHot: true,
+          wind:'微风'
+        };
+        //解决36行onClick={this.demo66}中 this.demo中this指向的问题
+        this.demo66 = this.demo.bind(this) 
+       /* 解释
+        //后面的this.demo去找原型对象上的方法，.bind(this)生成一个新的方法（但不调用），方法的this指向Weather的实例对象，（左侧）再讲新生成的防范挂到实例上，取名为demo。此时render中的this.demo用的就是自身的demo方法了. 
+        // 此时改动 this.demo 名称为 demo66， 那么35行 onClick={this.demo66}要改成这样，因为新创建的方法名改变了，onclick要拿到的应该是demo66这个挂在自身上的方法。不然就直接执行原型上的函数，直接执行的就是undefined了 */
+      }
+
+
+        //   ==============render调用几次？ ==== 1+n次， 1初始化那次，n是状态更新的次数
+      render() {
+          console.log('render调用了');
+        const { isHot,wind } = this.state;
+        //下面直接写 dmeo，实例对象才能使用类中的方法，正好this就是实例对象。
+        return <h2 id='title' onClick={this.demo66}>今天天气很{isHot ? "炎热" : "寒冷"},{wind}</h2>;
+      }
+
+
+    //   =============demo调用几次？========== 点几次调几次
+      demo(){
+          console.log('demo方法调用了')
+         /*-------------未写 29行代码    this.demo = this.demo.bind(this) 之前
+         //dmeo 放在哪里？ 类的原型对象上，供实例使用
+          //由于demo是作为onClick的回调，所以不是通过实例对象调用的，是直接调用。
+          //类中方法默认开启严格模式，所以demo中的this为undefined
+    //   console.log(this.state.isHot); //报错！ 这里面的this 指向undefined。 */ 
+    /* -------写了29行代码之后 */
+        console.log(this.state.isHot) //正确显示isHot
+        //！！！1严重注意！！！！！ 状态不可直接更改，下面这行就是直接更改，要借助一个内置API更改
+        // const isHot = this.state.isHot 错误写法
+        console.log(this)
+        // 严重注意！！！ state改变必须使用setState！！且更新是一种合并，不是替换。
+        const isHot= this.state.isHot
+        this.setState({isHot:!isHot})
+        }
+    }
+
+    //渲染组件到页面
+    ReactDOM.render(<Weather  />, document.getElementById("reactContainer"));
+
+    
+</script>
+</html>

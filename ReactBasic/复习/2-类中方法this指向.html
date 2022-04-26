@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Person{
+            constructor(name,age){
+                this.name=name
+                this.age=age
+            }
+            /* 类中局部引用的方法，已经在局部开好了 严格模式!! */
+            speak(){
+                //speak 放在哪里？ 类的原型对象上，供实例使用
+                //通过Person实例掉speak时，speak的this就是Person的实例
+                console.log(this)
+            }
+        }
+        const p1= new Person('ton',1)
+        p1.speak()  //通过实例调用 speak方法， 
+        const x = p1.speak   //p1.speak属于实例调用，
+        x()  // 打印 this undefined，    x()属于直接调用
+    </script>
+<!--     <script>
+        function demo(){
+            'use strict'
+            console.log('严格模式',this)//开启严格模式 undefined， 不开window
+        }
+        function demo2(){
+            console.log('非严格模式',this)//开启严格模式 undefined， 不开window
+        }
+        demo()
+        demo2()
+    </script> -->
+</body>
+</html>
