@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>document</title>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@17/umd/react.development.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    class Demo extends React.Component {
+      /* 
+        1.通过onXxx属性指定事件处理函数(大小写注意)
+            1.1 React使用自定义(合成)事件，而不是使用原生DOM事件   -----更好兼容性
+            1.2 React中事件是通过事件委托方式处理的(委托给最外层元素) -----高效
+        2.通过event.target得到发生事件的DOM元素对象   -----不要过度使用ref
+    */
+      myRef = React.createRef();
+      //展示左侧输入框的数据
+      showData = () => {
+        console.log(this.myRef.current.value);
+        alert(this.myRef.current.value);
+      };
+      showData2 = (event) => {
+        alert(event.target.value);
+      };
+      render() {
+        return (
+          <div>
+            <input
+              ref={this.myRef}
+              type="text"
+              placeholder="点击按钮提示数据"
+            />
+            <button onClick={this.showData}>点我提示左侧的数据</button>
+            <input
+              onBlur={this.showData2}
+              type="text"
+              placeholder="点击按钮提示数据"
+            />
+          </div>
+        );
+      }
+    }
+
+    ReactDOM.render(<Demo />, document.getElementById("reactContainer"));
+  </script>
+</html>
