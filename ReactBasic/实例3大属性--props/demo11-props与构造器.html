@@ -23,6 +23,14 @@
   <script type="text/babel">
     //   把限制放到类中
     class Person extends React.Component {
+        /* 1.构造器传给super和不传给super
+            构造器是否接受props，传不传给super 取决于：是否希望在构造器通过this访问props
+        */
+        constructor(props){
+            super(props)
+            console.log('实例自身的props',this.props);
+            
+        }
       render() {
         const { name, age, sex } = this.props;
         // props只读
@@ -37,28 +45,21 @@
       }
       
     }
-    // 对标签属性进行类型必要性的限制
     Person.propTypes={
           name:PropTypes.string.isRequired,//限制必传，且为字符串
           sex:PropTypes.string,
           age:PropTypes.number,
-          speak:PropTypes.func,
         }
-        // 指定标签属性默认值
     Person.defaultProps={
           sex:'未知',//设置默认值
           age:18
     }
-    // const p = {name:'jerry',age:18,sex :'男'}
-    const p = {name:'jerry'}
 
     //渲染组件到页面
     ReactDOM.render(
-      <Person {...p} speak={speak}/>,
+      <Person name='jerry'/>,
       document.getElementById("reactContainer")
     );
-    function speak(){
 
-    }
   </script>
 </html>

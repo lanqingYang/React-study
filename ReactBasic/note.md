@@ -62,4 +62,11 @@
 
     demo7 精简demo6代码,state的简写方式
 
+## react中 构造函数仅两种情况 （state中例子）
+    1.通过this.state 复制对象来初始化内部state
+    2.为事件处理函数绑定实例
+
 ## 组件实例3大属性 props
+    1.props限制，PropType， proptype.string.isRequired ,限制必填且未string类型，函数类型 func Person.propTypes={}。默认值：Person.defaultProps={}
+    2.props限制简写，放入类中，Person换为  static 就是类本身的属性，不加staic是实例的属性
+    3.构造器是否接受props，传不传给super 取决于：是否希望在构造器通过this访问props

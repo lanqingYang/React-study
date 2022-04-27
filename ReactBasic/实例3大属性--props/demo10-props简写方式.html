@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,10 +21,21 @@
   ></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- 全局多了一个对象 PropTypes -->
-  <script src="https://unpkg.com/prop-types@15.6.2/prop-types.js"></script>  
+  <script src="https://unpkg.com/prop-types@15.6.2/prop-types.js"></script>
   <script type="text/babel">
-    //   把限制放到类中
     class Person extends React.Component {
+      // 对标签属性进行类型必要性的限制
+      static propTypes = {
+        name: PropTypes.string.isRequired, //限制必传，且为字符串
+        sex: PropTypes.string,
+        age: PropTypes.number,
+        speak: PropTypes.func,
+      };
+      // 指定标签属性默认值
+      static defaultProps = {
+        sex: "未知", //设置默认值
+        age: 18,
+      };
       render() {
         const { name, age, sex } = this.props;
         // props只读
@@ -35,30 +48,15 @@
           </ul>
         );
       }
-      
     }
-    // 对标签属性进行类型必要性的限制
-    Person.propTypes={
-          name:PropTypes.string.isRequired,//限制必传，且为字符串
-          sex:PropTypes.string,
-          age:PropTypes.number,
-          speak:PropTypes.func,
-        }
-        // 指定标签属性默认值
-    Person.defaultProps={
-          sex:'未知',//设置默认值
-          age:18
-    }
-    // const p = {name:'jerry',age:18,sex :'男'}
-    const p = {name:'jerry'}
+
+    const p = { name: "jerry" };
 
     //渲染组件到页面
     ReactDOM.render(
-      <Person {...p} speak={speak}/>,
+      <Person {...p} speak={speak} />,
       document.getElementById("reactContainer")
     );
-    function speak(){
-
-    }
+    function speak() {}
   </script>
 </html>
