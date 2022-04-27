@@ -81,12 +81,21 @@
             因为在每次渲染的时候，会创建新的函数实例，所以会清空旧的，设置新的
             解决：替换回调函数为类上的方法。（但是上述也不影响）
     4.React.createRef()使用ref
+
         calss: myRef= React.createRef()，只能存一个，想要多个就要创建多个 myRef1..
          jsx: <input ref ={this.myRef} type="text" placeholder='点击按钮提示数据'/>
+
     5.不要过度使用Ref：
         当发生事件的元素刚好是要操作的元素，就可以用event事件直接实现操作dom不需要用ref
 ## 事件处理
+
     1.通过onXxx属性指定事件处理函数(大小写注意)
         1.1 React使用自定义(合成)事件，而不是使用原生DOM事件
         1.2 React中事件是通过事件委托方式处理的(委托给最外层元素)
     2.通过event.target得到发生事件的DOM元素对象  ----不要过度使用ref，当发生事件的元素刚好是要操作的元素，就可以用event事件
+
+## react中收集表单数据 
+##### **官网：请勿过度使用ref**
+    表单提交，默认引发页面跳转、刷新
+    非受控：要写ref.  
+    受控  优势 省略掉ref：类似于vue双向绑定(v-model=v-bind+@change语法糖)。
