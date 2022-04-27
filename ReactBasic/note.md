@@ -70,3 +70,16 @@
     1.props限制，PropType， proptype.string.isRequired ,限制必填且未string类型，函数类型 func Person.propTypes={}。默认值：Person.defaultProps={}
     2.props限制简写，放入类中，Person换为  static 就是类本身的属性，不加staic是实例的属性
     3.构造器是否接受props，传不传给super 取决于：是否希望在构造器通过this访问props
+
+## 组件实例3大属性 refs
+    1.ref当标识使用 类似于id
+    2.字符形式的ref，可能被废弃，不推荐。 效率问题。
+    回调函数特点：1.自己定义的 2.自己没调用 3.函数执行了
+    3.回调函数中ref：
+        3.1 第一次渲染，ref中回调函数执行一次
+        3.2 内联的回调函数： 更新时，2次，第一次null，第二次才返回node节点。 （更新，调render，状态改变调用render，1+n次，）
+            因为在每次渲染的时候，会创建新的函数实例，所以会清空旧的，设置新的
+            解决：替换回调函数为类上的方法。（但是上述也不影响）
+    4.React.createRef()使用ref
+        calss: myRef= React.createRef()，只能存一个，想要多个就要创建多个 myRef1..
+         jsx: <input ref ={this.myRef} type="text" placeholder='点击按钮提示数据'/>
