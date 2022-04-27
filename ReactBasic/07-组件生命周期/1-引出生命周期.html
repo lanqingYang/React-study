@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@17/umd/react.development.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    /* 
+      任务 ： H2显示内容透明度从1===》0 过程耗时2s，每次减少0.1
+      */
+    class Life extends React.Component {
+      state = {
+        opacity: 0.1,
+      };
+      death = () => {
+        //卸载组件 unmount, 卸载组件在那个节点
+        ReactDOM.unmountComponentAtNode(
+          document.getElementById("reactContainer")
+        );
+      };
+      // 组件挂载完毕调用
+      componentDidMount() {
+        setInterval(() => {
+          let { opacity } = this.state;
+          opacity -= 0.1;
+          if (opacity <= 0) opacity = 1;
+          this.setState({ opacity });
+        }, 200);
+      }
+      // render：初始化渲染，状态更新
+      render() {
+        //  定时器如果写在这里， 状态改变，会调用render，就会生成超多定时器
+
+        return (
+          <div>
+            <h2 style={{ opacity: this.state.opacity }}>React 学不会怎么办</h2>
+            <button onClick={this.death}>不活了</button>
+          </div>
+        );
+      }
+    }
+
+    //渲染组件到页面
+    ReactDOM.render(<Life />, document.getElementById("reactContainer"));
+  </script>
+</html>
