@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@17/umd/react.development.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+//#region
+   /*    1.高阶函数： 如果函数符合下面2个规范中任何一个，就是高阶函数：
+        1.1 若A函数，接受的参数是一个函数
+        1.2 若A函数，调用的返回值依然是一个函数
+
+    2.函数的柯里化：通过函数调用继续返回函数的方式，实现多次接收参数最后统一处理的函数编码形式 
+    function sum(a){
+            return (b)=>{
+                return (c)=>{
+                    return a+b+c
+                }
+            }
+        }
+    */
+//#endregion
+
+    class Login extends React.Component {
+      // 初始化状态
+      state = {
+        username: "",
+        password: "",
+      };
+ 
+      saveFormDate = (dataType) => {
+        //   下面这个函数才是正真onchange的回调。 
+        return (event)=>{
+            this.setState({[dataType]:event.target.value})
+        }
+      };
+      handleSubmit = (event) => {
+        event.preventDefault(); //阻止表单提交
+        const { username, password } = this.state;
+        alert(`用户名：${username},密码:${password}`);
+      };
+      render() {
+        return (
+          <form onSubmit={this.handleSubmit}>
+            用户名:
+            <input onChange={this.saveFormDate('username')} type="text" name="userName" />
+            密码：
+            <input
+              onChange={this.saveFormDate('password')}
+              type="password"
+              name="password"
+            />
+            <button>登录</button>
+          </form>
+        );
+      }
+    }
+
+    //渲染组件到页面
+    ReactDOM.render(<Login />, document.getElementById("reactContainer"));
+  </script>
+</html>
