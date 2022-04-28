@@ -21,6 +21,7 @@
   <script type="text/babel">
     /* 
       任务 ： H2显示内容透明度从1===》0 过程耗时2s，每次减少0.1
+      生命周期回调函数/钩子函数
       */
     class Life extends React.Component {
       state = {
@@ -32,16 +33,21 @@
           document.getElementById("reactContainer")
         );
       };
-      // 组件挂载完毕调用
+      // ---------------------组件挂载完毕调用------------------
       componentDidMount() {
-        setInterval(() => {
+        this.timer = setInterval(() => {
           let { opacity } = this.state;
           opacity -= 0.1;
           if (opacity <= 0) opacity = 1;
           this.setState({ opacity });
         }, 200);
       }
-      // render：初始化渲染，状态更新
+      // ---------------------组件将要被卸载--------------------
+      componentWillUnmount() {
+        // 清楚定时器
+        clearInterval(this.timer);
+      }
+      // render：------------初始化渲染，状态更新----------------
       render() {
         //  定时器如果写在这里， 状态改变，会调用render，就会生成超多定时器
 

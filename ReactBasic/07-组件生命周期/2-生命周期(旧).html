@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script
+    src="https://unpkg.com/react@17/umd/react.development.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    /* 
+      1.初始化阶段：由ReactDOM.render()触发
+            1.1 constructor
+            1.2 componentWillMount
+            1.3 render
+            1.4 componentDidMount  ======> 常用
+                一般做一些初始化的事儿，开启定时器，发送网络请求，订阅消息等
+      2.更新阶段: 由组件内部this.setSate()或父组件render触发
+            2.1 shouldComponentUpdate (forceUpdate,会跳过这个步骤)
+            2.2 componentWillUpdate
+            2.3 render
+            2.4 componentDidUpdate
+      3.卸载组件：由ReactDOM.unmountComponentAtNode()触发
+            3.1 componentWillUnmount  ======> 常用
+                一般做一些收尾的事儿，关定时器，取消订阅消息
+      */
+    class Count extends React.Component {
+//----------构造器-----------
+        constructor(props){
+            console.log('构造器----Count --- constructor');
+            super(props)
+            this.state ={
+                count:0
+            }
+        }
+      
+      add = () => {
+        const { count } = this.state;
+        this.setState({ count: count + 1 });
+      };
+      death=()=>{
+          ReactDOM.unmountComponentAtNode(document.getElementById('reactContainer'))
+      }
+      force=()=>{
+          this.forceUpdate()  //不受阀门影响 shouldCompnentUpdate
+      }
+
+    //   -------------组件将要挂载的钩子-------
+      componentWillMount(){
+          console.log('将要挂载----Count --- componentWillMount');
+      }
+    // --------------组件挂载完毕钩子-------
+    componentDidMount(){
+        console.log('挂载完毕----Count --- componentDidMount');
+    }
+    // ---------------组件将要卸载钩子-----------
+    componentWillUnmount(){
+        console.log("组件将要卸载钩子----Count--- componentWillUnmount");
+    }
+    //------------组件是否应该更新钩子（不写默认true） 控制组件是否更新的阀门-----
+    shouldComponentUpdate(){
+        console.log('组件是否应该更新----Count--- shouldComponentUpdate');
+        return true
+        // return false 
+    }
+    // ---------------组件将要更新-----------
+    componentWillUpdate(){
+        console.log("组件将要更新----Count--- componentWillUpdate");
+    }
+    // --------------组件更新完毕-------
+    componentDidUpdate(){
+        console.log('组件更新完毕----Count --- componentDidUpdate');
+    }
+
+
+      render() {
+          console.log('Count --- render')
+        const { count } = this.state;
+        return (
+          <div>
+            <h2>当前求和为：{count}</h2>
+            <button onClick={this.add}>点我+1</button>
+            <button onClick={this.death}>卸载组件</button>
+            <button onClick={this.force}>不更改任何状态中的数据，强制更新组件</button>
+          </div>
+        );
+      }
+    }
+
+    class A extends React.Component{
+        state={
+            carName:"奔驰"
+        }
+        changeCar=()=>{
+            this.setState({carName:'奥托'})
+        }
+        render(){
+            return (
+                <div>
+                 <div>我是A组件</div>
+                 <button onClick={this.changeCar}>换车</button>
+                 <B carName={this.state.carName} />    
+                </div>
+            )
+        }
+    }
+    class B extends React.Component{
+        //组件将要接受新的props  ，坑！！ 第一次穿过来的props不会调用
+        componentWillReceiveProps(){
+            console.log('B---- componentWillReciveProps');
+        }
+        shouldComponentUpdate(){
+            console.log('B---- shouldComponentUpdate');
+            return true
+        }
+        componentWillUpdate(){
+        console.log("B--- componentWillUpdate");
+    }
+    componentDidUpdate(){
+        console.log('B --- componentDidUpdate');
+    }
+
+        render(){
+            console.log('B --- render');
+            return (
+                <div>B,接受到的车是：{this.props.carName}</div>
+            )
+        }
+    }
+    //看 挂载的生命周期，A组件换成C
+    ReactDOM.render(<A />, document.getElementById("reactContainer"));
+  </script>
+</html>

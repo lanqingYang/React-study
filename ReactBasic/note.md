@@ -112,3 +112,22 @@
 ## 组件生命周期
     挂载 Mount： 把组件挂载到页面上
     卸载 UnMount： 卸载组件
+
+### 生命周期(旧版本)
+    旧版本坑:坑！！ 第一次传过来的props不会调用
+     1.初始化阶段：由ReactDOM.render()触发
+            1.1 constructor
+            1.2 componentWillMount
+            1.3 render
+            1.4 componentDidMount ======> 常用
+                一般做一些初始化的事儿，开启定时器，发送网络请求，订阅消息等
+      2.更新阶段: 由组件内部this.setSate()或父组件render触发
+            2.1 shouldComponentUpdate
+            2.2 componentWillUpdate
+            2.3 render
+            2.4 componentDidUpdate
+      3.卸载组件：由ReactDOM.unmountComponentAtNode()触发
+            3.1 componentWillUnmount ======> 常用
+                一般做一些收尾的事儿，关定时器，取消订阅消息
+
+![生命周期旧](./pic/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%97%A7.jpg) 
