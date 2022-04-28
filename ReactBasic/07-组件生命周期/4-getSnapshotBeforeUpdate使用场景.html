@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        .list{
+            height: 150px;
+            width: 200px;
+            overflow: auto;
+            background-color: skyblue;
+        }
+        .news{
+            height: 30px;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script src="../reactCDN/新版本/react.development.js"></script>
+  <script src="../reactCDN/新版本/react-dom.development.js"></script>
+  <script src="../reactCDN/新版本/babel.min.js"></script>
+  <script type="text/babel">
+      /* 
+      任务： 最开始无新闻，每隔1s出现一条,
+            当拖到一条新闻时，停留在当前新闻，但还是继续获取新闻
+      */
+    class NewsList extends React.Component {
+        state={
+            newsArr:[]
+        }
+        getSnapshotBeforeUpdate(){
+            //新的新闻回来前有，高度有多高
+            return this.list.scrollHeight
+        }
+        componentDidMount(){
+            this.timer = setInterval(()=>{
+                //获取原状态
+                const {newsArr} =this.state
+                //模拟一条新闻
+                const news = '新闻'+(newsArr.length +1)
+                //更新状态
+                this.setState({
+                    newsArr:  [news,...newsArr]
+                })
+            },1000)
+        }
+        componentDidUpdate(preProps,preState,height){
+            console.log(height);
+            this.list.scrollTop += (this.list.scrollHeight - height)
+        }
+      render() {
+        return (
+          <div className="list" ref ={c=>this.list =c}>
+            {this.state.newsArr.map((n,index)=>{
+                return <div className='news' key={index} >{n}</div>
+            })}
+          </div>
+        );
+      }
+    }
+
+    ReactDOM.render(
+      <NewsList  />,
+      document.getElementById("reactContainer")
+    );
+  </script>
+</html>
