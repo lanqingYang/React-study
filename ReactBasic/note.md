@@ -158,3 +158,26 @@
 ### 总结生命周期新旧
     1. 三个重要钩子： render componentDidMount componentWillUnmount
     2. 三个即将废弃：componentWillMount、componentWillUpdate、componentWillRecieveProps，下个大版本需加上 'UNSAFE_'(表示未来版本可能出现bug)
+
+
+## DOM的diffing算法
+    1.比较不同的最小粒度是标签
+### **2.为什么遍历的时候 key不要用index！！！！**
+    1) 比较规则:
+        a.旧虚拟DOM中找到与新虚拟DOM相同key
+            `若虚拟DOM中内容过没变，直接使用真实DOM;
+            ` 变了，生成新真实DOM，换掉页面中之前的真实DOM
+        b.未找到与新虚拟DOM相同key
+            ·根据数据创建新的真实DOM，随后渲染到页面
+    2)用index作为key可能引发的问题
+        a.对数据进行：逆序！添加、删除等操作：
+            产生没有必要的真实DOM更新 ==> 界面效果没问题，但效率低
+        b.如果结构中包含输入类的DOM
+            产生错误DOM更新==> 界面有问题
+        c.注意：
+            如果不存在对数据逆序！删除等破坏操作，仅用于渲染列表用于展示，使用index作为key没有问题！
+    3)开发中选择key：
+        a.选用每条数据唯一标识作为key
+        b.如果只是简单展示数据，用index也可以
+
+        
