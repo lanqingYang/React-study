@@ -124,10 +124,37 @@
       2.更新阶段: 由组件内部this.setSate()或父组件render触发
             2.1 shouldComponentUpdate
             2.2 componentWillUpdate
-            2.3 render
+            2.3 render  ===> 常用
             2.4 componentDidUpdate
       3.卸载组件：由ReactDOM.unmountComponentAtNode()触发
             3.1 componentWillUnmount ======> 常用
                 一般做一些收尾的事儿，关定时器，取消订阅消息
 
-![生命周期旧](./pic/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%97%A7.jpg) 
+![生命周期旧](./pic/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%97%A7.jpg)
+
+### 生命周期（新版本）
+    1.will相关的都需要加上前缀 UNSAFA_componentWillMount、Update、RecieveProps，除了Unmount。最好不使用前三个
+    2.区别，废弃了3个will， 新增两个新的： getDerivedStateFromProps，getSnapshotBeforeUpdate（新增的两个及其罕见，可以不用）
+        2.1： getDerivedStateFromProps从props获取派生的state，即state的值在任何时候都取决于props
+        2.2  getSnapshotBeforeUpdate 在更新前获取快照值，在更新前，将快照值传递给componentDidUpdate(prePros,preState,snapshotValue)
+
+    1.初始化阶段：由ReactDOM.render()触发
+            1.1 constructor
+            1.2 getDerivedStateFromProps(props), 需return ， return的值即新的state，如果 return props： state完全取决于props
+            1.3 render  ===> 常用
+            1.4 componentDidMount  ===> 常用
+    2.更新阶段: 由组件内部this.setSate()或父组件render触发
+            2.1 getDerivedStateFromProps 
+            2.2 shouldComponentUpdate (forceUpdate,会跳过这个步骤)
+            2.3 render
+            2.4 getSnapshotBeforeUpdate ， 需return 值，传递给下方的第三个参数
+            2.5 componentDidUpdate(preProps,preState,snapshotValue)
+    3.卸载组件：由ReactDOM.unmountComponentAtNode()触发
+            3.1 componentWillUnmount ===> 常用
+
+
+![生命周期新](./pic/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%96%B0.jpg)
+
+### 总结生命周期新旧
+    1. 三个重要钩子： render componentDidMount componentWillUnmount
+    2. 三个即将废弃：componentWillMount、componentWillUpdate、componentWillRecieveProps，下个大版本需加上 'UNSAFE_'(表示未来版本可能出现bug)

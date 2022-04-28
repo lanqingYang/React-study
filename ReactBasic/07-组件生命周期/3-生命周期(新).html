@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="reactContainer"></div>
+  </body>
+  <script src="../reactCDN/新版本/react.development.js"></script>
+  <script src="../reactCDN/新版本/react-dom.development.js"></script>
+  <script src="../reactCDN/新版本/babel.min.js"></script>
+  <script type="text/babel">
+    /* 
+      1.will相关的都需要加上前缀 UNSAFA_componentWillMount、Update、RecieveProps，除了Unmount。最好不使用前三个
+      2.区别，废弃了3个will， 新增两个新的： getDerivedStateFromProps，getSnapshotBeforeUpdate（新增的两个及其罕见，可以不用）
+        2.1： getDerivedStateFromProps从props获取派生的state，即state的值在任何时候都取决于props
+        2.2  getSnapshotBeforeUpdate 在更新前获取快照值，在更新前，将快照值传递给componentDidUpdate(prePros,preState,snapshotValue)
+
+      1.初始化阶段：由ReactDOM.render()触发
+            1.1 constructor
+            1.2 getDerivedStateFromProps
+            1.3 render
+            1.4 componentDidMount  
+      2.更新阶段: 由组件内部this.setSate()或父组件render触发
+            2.1 getDerivedStateFromProps
+            2.2 shouldComponentUpdate (forceUpdate,会跳过这个步骤)
+            2.3 render
+            2.4 getSnapshotBeforeUpdate
+            2.5 componentDidUpdate
+      3.卸载组件：由ReactDOM.unmountComponentAtNode()触发
+            3.1 componentWillUnmount 
+      */
+    class Count extends React.Component {
+      //----------构造器-----------
+      constructor(props) {
+        console.log("构造器----Count --- constructor");
+        super(props);
+        this.state = {
+          count: 0,
+        };
+      }
+
+      add = () => {
+        const { count } = this.state;
+        this.setState({ count: count + 1 });
+      };
+      death = () => {
+        ReactDOM.unmountComponentAtNode(
+          document.getElementById("reactContainer")
+        );
+      };
+      force = () => {
+        this.forceUpdate(); //不受阀门影响 shouldCompnentUpdate
+      };
+
+      //从props获取派生的state
+      static getDerivedStateFromProps(props, state) {
+        console.log(props, state);
+        console.log("Count --- getDerivedStateFromProps");
+        // return props  //用props对象更替state，即state的值在任何时候都取决于props
+        return null;
+      }
+      // 在更新前获取快照
+      getSnapshotBeforeUpdate() {
+        console.log("Count----getSnapshotBeforeUpdate");
+        // return null  //可以返回任何值
+        return 'ylq'
+
+      }
+
+      // --------------组件挂载完毕钩子-------
+      componentDidMount() {
+        console.log("挂载完毕----Count --- componentDidMount");
+      }
+
+      //------------组件是否应该更新钩子（不写默认true） 控制组件是否更新的阀门-----
+      shouldComponentUpdate() {
+        console.log("组件是否应该更新----Count--- shouldComponentUpdate");
+        return true;
+        // return false
+      }
+
+      // --------------组件更新完毕-------
+      componentDidUpdate(preProps,preState,snapshotValue) {
+        console.log("组件更新完毕----Count --- componentDidUpdate",'preProps:',preProps,'preState:',preState,'snapshotValue:',snapshotValue);
+    
+      }
+
+      render() {
+        console.log("Count --- render");
+        const { count } = this.state;
+        return (
+          <div>
+            <h2>当前求和为：{count}</h2>
+            <button onClick={this.add}>点我+1</button>
+            <button onClick={this.death}>卸载组件</button>
+            <button onClick={this.force}>
+              不更改任何状态中的数据，强制更新组件
+            </button>
+          </div>
+        );
+      }
+    }
+
+    ReactDOM.render(
+      <Count count={199} />,
+      document.getElementById("reactContainer")
+    );
+  </script>
+</html>

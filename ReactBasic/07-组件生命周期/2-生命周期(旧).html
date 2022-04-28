@@ -36,109 +36,110 @@
                 一般做一些收尾的事儿，关定时器，取消订阅消息
       */
     class Count extends React.Component {
-//----------构造器-----------
-        constructor(props){
-            console.log('构造器----Count --- constructor');
-            super(props)
-            this.state ={
-                count:0
-            }
-        }
-      
+      //----------构造器-----------
+      constructor(props) {
+        console.log("构造器----Count --- constructor");
+        super(props);
+        this.state = {
+          count: 0,
+        };
+      }
+
       add = () => {
         const { count } = this.state;
         this.setState({ count: count + 1 });
       };
-      death=()=>{
-          ReactDOM.unmountComponentAtNode(document.getElementById('reactContainer'))
-      }
-      force=()=>{
-          this.forceUpdate()  //不受阀门影响 shouldCompnentUpdate
-      }
+      death = () => {
+        ReactDOM.unmountComponentAtNode(
+          document.getElementById("reactContainer")
+        );
+      };
+      force = () => {
+        this.forceUpdate(); //不受阀门影响 shouldCompnentUpdate
+      };
 
-    //   -------------组件将要挂载的钩子-------
-      componentWillMount(){
-          console.log('将要挂载----Count --- componentWillMount');
+      //   -------------组件将要挂载的钩子-------
+      componentWillMount() {
+        console.log("将要挂载----Count --- componentWillMount");
       }
-    // --------------组件挂载完毕钩子-------
-    componentDidMount(){
-        console.log('挂载完毕----Count --- componentDidMount');
-    }
-    // ---------------组件将要卸载钩子-----------
-    componentWillUnmount(){
+      // --------------组件挂载完毕钩子-------
+      componentDidMount() {
+        console.log("挂载完毕----Count --- componentDidMount");
+      }
+      // ---------------组件将要卸载钩子-----------
+      componentWillUnmount() {
         console.log("组件将要卸载钩子----Count--- componentWillUnmount");
-    }
-    //------------组件是否应该更新钩子（不写默认true） 控制组件是否更新的阀门-----
-    shouldComponentUpdate(){
-        console.log('组件是否应该更新----Count--- shouldComponentUpdate');
-        return true
-        // return false 
-    }
-    // ---------------组件将要更新-----------
-    componentWillUpdate(){
+      }
+      //------------组件是否应该更新钩子（不写默认true） 控制组件是否更新的阀门-----
+      shouldComponentUpdate() {
+        console.log("组件是否应该更新----Count--- shouldComponentUpdate");
+        return true;
+        // return false
+      }
+      // ---------------组件将要更新-----------
+      componentWillUpdate() {
         console.log("组件将要更新----Count--- componentWillUpdate");
-    }
-    // --------------组件更新完毕-------
-    componentDidUpdate(){
-        console.log('组件更新完毕----Count --- componentDidUpdate');
-    }
-
+      }
+      // --------------组件更新完毕-------
+      componentDidUpdate() {
+        console.log("组件更新完毕----Count --- componentDidUpdate");
+      }
 
       render() {
-          console.log('Count --- render')
+        console.log("Count --- render");
         const { count } = this.state;
         return (
           <div>
             <h2>当前求和为：{count}</h2>
             <button onClick={this.add}>点我+1</button>
             <button onClick={this.death}>卸载组件</button>
-            <button onClick={this.force}>不更改任何状态中的数据，强制更新组件</button>
+            <button onClick={this.force}>
+              不更改任何状态中的数据，强制更新组件
+            </button>
           </div>
         );
       }
     }
 
-    class A extends React.Component{
-        state={
-            carName:"奔驰"
-        }
-        changeCar=()=>{
-            this.setState({carName:'奥托'})
-        }
-        render(){
-            return (
-                <div>
-                 <div>我是A组件</div>
-                 <button onClick={this.changeCar}>换车</button>
-                 <B carName={this.state.carName} />    
-                </div>
-            )
-        }
+    class A extends React.Component {
+      state = {
+        carName: "奔驰",
+      };
+      changeCar = () => {
+        this.setState({ carName: "奥托" });
+      };
+      render() {
+        return (
+          <div>
+            <div>我是A组件</div>
+            <button onClick={this.changeCar}>换车</button>
+            <B carName={this.state.carName} />
+          </div>
+        );
+      }
     }
-    class B extends React.Component{
-        //组件将要接受新的props  ，坑！！ 第一次穿过来的props不会调用
-        componentWillReceiveProps(){
-            console.log('B---- componentWillReciveProps');
-        }
-        shouldComponentUpdate(){
-            console.log('B---- shouldComponentUpdate');
-            return true
-        }
-        componentWillUpdate(){
+    class B extends React.Component {
+      //组件将要接受新的props  ，坑！！ 第一次穿过来的props不会调用
+      componentWillReceiveProps() {
+        console.log("B---- componentWillReciveProps");
+      }
+      shouldComponentUpdate() {
+        console.log("B---- shouldComponentUpdate");
+        return true;
+      }
+      componentWillUpdate() {
         console.log("B--- componentWillUpdate");
-    }
-    componentDidUpdate(){
-        console.log('B --- componentDidUpdate');
-    }
+      }
+      componentDidUpdate() {
+        console.log("B --- componentDidUpdate");
+      }
 
-        render(){
-            console.log('B --- render');
-            return (
-                <div>B,接受到的车是：{this.props.carName}</div>
-            )
-        }
+      render() {
+        console.log("B --- render");
+        return <div>B,接受到的车是：{this.props.carName}</div>;
+      }
     }
     //看 挂载的生命周期，A组件换成C
-    ReactDOM.render(<A />, document.getElementById("reactContainer"));
+    ReactDOM.render(<Count />, document.getElementById("reactContainer"));
   </script>
 </html>
